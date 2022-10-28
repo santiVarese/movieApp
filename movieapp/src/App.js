@@ -14,6 +14,18 @@ function App() {
   const [trailer, setTrailer] = useState(null);
   const [movie, setMovie] = useState({ title: "loading Movies" });
   const [playing, setPlaying] = useState(false);
+  const [myMovieList, setMyMovieList] = useState([]);
+
+  const addTo = (movie) => {
+    const newArray = [...myMovieList, movie];
+    setMyMovieList(newArray);
+  };
+  const removeFrom = (movie) => {
+    const newArray = myMovieList.filter((mymovie) => {
+      return mymovie.id !== movie.id;
+    });
+    setMyMovieList(newArray);
+  };
 
   //funcion para realizar la peticion por get a la api
   const fetchMovies = async (searchKey) => {
@@ -144,13 +156,51 @@ function App() {
               className="col-md-4 mb-3"
               onClick={() => selectMovie(movie)}
             >
-              <img
-                src={`${URL_IMAGE + movie.poster_path}`}
-                alt=""
-                height={600}
-                width="100%"
-              />
-              <h4 className="text-center">{movie.title}</h4>
+              <div className="box">
+                <img
+                  src={`${URL_IMAGE + movie.poster_path}`}
+                  alt=""
+                  height={600}
+                  width="100%"
+                />
+                <div className="overlay" onClick={() => addTo(movie)}>
+                  <div class="wrapper">
+                    <a href="#">
+                      <span>Add to de list!</span>
+                    </a>
+                  </div>
+                </div>
+                <h4 className="text-center">{movie.title}</h4>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="container mt-3">
+        <div className="row">
+          {myMovieList.map((movie) => (
+            <div
+              key={movie.id}
+              className="col-md-4 mb-3"
+              onClick={() => selectMovie(movie)}
+            >
+              <div className="box">
+                <img
+                  src={`${URL_IMAGE + movie.poster_path}`}
+                  alt=""
+                  height={600}
+                  width="100%"
+                />
+                <div className="overlay" onClick={() => removeFrom(movie)}>
+                  <div class="wrapper">
+                    <a href="#">
+                      <span>Remove from list</span>
+                    </a>
+                  </div>
+                </div>
+                <h4 className="text-center">{movie.title}</h4>
+              </div>
             </div>
           ))}
         </div>
